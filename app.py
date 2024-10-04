@@ -42,14 +42,15 @@ bucket = storage.bucket(os.getenv('FIREBASE_BUCKET'))
 USERNAME = os.getenv('USERNAME')
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-try:
-    model = initialize_model('sentence-transformers/all-MiniLM-L6-v2')
-    tokenizer = intialize_tokenizer('sentence-transformers/all-MiniLM-L6-v2')
-except Exception as e:
-    app.logger.error(f"Failed to load model: {e}")
-    model, tokenizer = None, None
+def load_model():
+    try:
+        model = initialize_model('sentence-transformers/all-MiniLM-L6-v2')
+        tokenizer = intialize_tokenizer('sentence-transformers/all-MiniLM-L6-v2')
+    except Exception as e:
+        app.logger.error(f"Failed to load model: {e}")
+        model, tokenizer = None, None
 
 
 
@@ -298,5 +299,11 @@ def get_recommendations():
 
     return jsonify(response), 200
 
+
+@app.before_first_request
+def startup():
+    load_model()
+
+    
 if __name__ == '__main__':
     app.run(debug=True)
