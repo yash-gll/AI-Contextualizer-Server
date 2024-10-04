@@ -44,10 +44,12 @@ USERNAME = os.getenv('USERNAME')
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-# Define global variables for model and tokenizer
-global model, tokenizer
+# Declare these variables globally
+model = None
+tokenizer = None
 
 def load_model():
+    global model, tokenizer
     try:
         model = initialize_model('sentence-transformers/all-MiniLM-L6-v2')
         tokenizer = intialize_tokenizer('sentence-transformers/all-MiniLM-L6-v2')
