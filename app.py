@@ -300,7 +300,7 @@ def get_recommendations():
     return jsonify(response), 200
 
 
-@app.before_first_request
+@app.before_request
 def startup():
     load_model()
 
