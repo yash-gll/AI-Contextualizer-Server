@@ -44,6 +44,9 @@ USERNAME = os.getenv('USERNAME')
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "*"}})
 
+# Define global variables for model and tokenizer
+global model, tokenizer
+
 def load_model():
     try:
         model = initialize_model('sentence-transformers/all-MiniLM-L6-v2')
